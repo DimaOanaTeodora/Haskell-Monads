@@ -67,6 +67,7 @@
       - ask, local - 2 auxliar functions for EnvReader
  
    * []()
-:biohazard: []()
-:biohazard: []()
-:biohazard: []()
+   * []()
+### :biohazard: [Class 6]()
+### :biohazard: [Class 7]()
+
