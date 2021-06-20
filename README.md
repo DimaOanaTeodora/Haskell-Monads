@@ -60,6 +60,12 @@
       - interpretor mini Haskell for List Monad with data Value
       - test program
       - show function (system defined for List) 
+   * [EnvReader Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mEnvReader.hs)
+      
+      - Reader Monad with environment 
+      - interp function with one argument
+      - ask, local - 2 auxliar functions for EnvReader
+ 
    * []()
 :biohazard: []()
 :biohazard: []()
