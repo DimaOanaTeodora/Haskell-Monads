@@ -1,14 +1,14 @@
 # Haskell Course :crystal_ball:
 ## Monads Labs
 
-:biohazard: [Class 1](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP1.hs)
+### :biohazard: [Class 1](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP1.hs)
    - Mini-Haskell
    - Counter
  
-:biohazard: [Class 2](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP2.hs)
+### :biohazard: [Class 2](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP2.hs)
    - Statements
  
-:biohazard: Class 3
+### :biohazard: Class 3
 
   * [Maybe Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mMaybe.hs)
   
@@ -32,7 +32,7 @@
       - show a Person (data)
       - show a Person (Reader monad)
       
-:biohazard: Class 4-5 
+### :biohazard: Class 4-5 
    * [Identity Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mIdentity.hs)
    
       - data Value 
@@ -53,6 +53,7 @@
       - interpretor mini Haskell for Either String Monad with data Value
       - test programs
       - show function (system defined for Either String) 
+   * []()
 :biohazard: []()
 :biohazard: []()
 :biohazard: []()
