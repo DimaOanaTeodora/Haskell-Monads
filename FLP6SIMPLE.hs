@@ -64,7 +64,7 @@ data Stmt
     | Read String Name
     | Print String Exp
     | While Exp Stmt
-    | Block [Stmt]
+    | Block [Stmt] 
     | Decl Name Exp
   deriving (Show)
   
