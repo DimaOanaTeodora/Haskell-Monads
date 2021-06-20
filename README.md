@@ -46,7 +46,13 @@
       - interpretor mini Haskell for Maybe Monad with data Value
       - test programs
       - show function (system defined for Maybe) 
-   * []()
+   * [Either String Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mEitherString.hs)
+   
+      - Either String Monad (is system defined)
+      - data Value
+      - interpretor mini Haskell for Either String Monad with data Value
+      - test programs
+      - show function (system defined for Either String) 
 :biohazard: []()
 :biohazard: []()
 :biohazard: []()
