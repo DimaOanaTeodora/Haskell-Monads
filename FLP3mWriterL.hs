@@ -1,58 +1,63 @@
+--- Monada Writer List
+-- Writer este constructorul 
+-- cu runWriter se face afisarea
+newtype WriterL a = Writer { runWriter :: (a, [String]) } 
 
---- Monada Writer
-
-    
-
-newtype WriterLS a = Writer { runWriter :: (a, [String]) } 
-
-
-instance  Monad WriterLS where
+instance  Monad WriterL where
   return va = Writer (va, [])
   ma >>= k = let (va, log1) = runWriter ma
                  (vb, log2) = runWriter (k va)
              in  Writer (vb, log1 ++ log2)
 
-
-instance  Applicative WriterLS where
+instance  Applicative WriterL where
   pure = return
   mf <*> ma = do
     f <- mf
     a <- ma
     return (f a)       
 
-instance  Functor WriterLS where              
-  fmap f ma = pure f <*> ma 
+instance  Functor WriterL where              
+  fmap f ma = pure f <*> ma     
 
-
-
-tell :: String -> WriterLS () 
+tell :: String -> WriterL () -- functie auxiliara
 tell log = Writer ((), [log])
   
-logIncrement :: Int  -> WriterLS Int
-logIncrement x = Writer(x+1, ["Am incrementat " ++ (show x) ++ " "])
--- runWriter $ (logIncrementN 3 4) => (7,["Incrementam: 3","Incrementam: 4","Incrementam: 5","Incrementam: 6"])
+logIncrement :: Int  -> WriterL Int
+logIncrement x = Writer (x+1, ["Am incrementat " ++ show(x)])
+-- runWriter (logIncrement 3) => (4,"Am incrementat 3 ")
 
+-- Varianta DO ---
+logIDo :: Int  -> WriterL Int
+logIDo x = do
+      tell("Am incrementat " ++ show(x))
+      return (x+1)
 
--- nu se schimba fata de varianta initiala 
-logIncrementN :: Int -> Int -> WriterLS Int
-logIncrementN x n =  do
-                      tell ("Incrementam: " ++ show x)
-                      if n > 1 then logIncrementN (x+1) (n-1)
-                      else return (x+1)
-                         
-isPos :: Int -> WriterLS Bool
+-- varianta DO1
+logIncrementN :: Int -> Int -> WriterL Int
+logIncrementN x 1 = logIncrement x
+logIncrementN x n = do 
+                  y <- logIncrementN x (n-1)
+                  logIncrement y
+-- runWriter $ logIncrementN 2 4
+
+-- varianta DO2
+logINDo:: Int -> Int -> WriterL Int
+logINDo x n =  do
+      tell ("Am incrementat " ++ show x)
+      if n > 1 then logINDo (x+1) (n-1)
+      else return (x+1)
+
+isPos :: Int -> WriterL Bool
 isPos x = if (x>= 0) then (Writer (True, ["poz"])) else (Writer (False, ["neg"]))
--- nu pot sa-i afisez rezultatul pentru ca nu are show                           
--- map isPos [1,2,3] => EROARE
--- map runWriter $ map isPos [1,2,3] => [(True,["poz"]),(True,["poz"]),(True,["poz"])]
---                                    => lista de valori monadice
-mapWriterLS :: (a -> WriterLS b) -> [a] -> WriterLS [b]
-mapWriterLS f [] = return []
-mapWriterLS f (x:xs) = do
-                        y <- f x -- f x e valoarea monadica deci trebuie sa extrag din el folsind '<-'
-                        ys <- mapWriterLS f xs
-                        return (y:ys)
--- runWriter $ mapWriterLS isPos [1,-2,3] => ([True,False,True],["poz","neg","poz"])
+-- map isPos [1,2,3] => EROARE deoarece are rezultate monadice care au nevoie de runWriter la afisare
+-- map :: (a -> b) -> [a] -> [b]
+-- map runWriter $ map isPos [1,-2,3] => [(True,["poz"]),(False,["neg"]),(True,["poz"])]
 
--- Vraianta fara definitie monadica
---mapWriterLS f xs = let ys = map f xs in Writer ( [fst (runWriter y) | y <- ys], concat [snd (runWriter y)| y<- ys])
+mymap :: (a -> WriterL b) -> [a] -> WriterL [b] -- ca la Maybe doar ca schimb in definitia functiei
+mymap f [] = return []
+mymap f (x:xs) = do
+                  y <- f x 
+                  ys <- mymap f xs
+                  return (y:ys)
+
+-- runWriter $ mymap isPos [1,-2,3] => ([True,False,True],["poz","neg","poz"])
