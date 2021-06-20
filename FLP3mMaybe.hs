@@ -1,122 +1,107 @@
 import Test.QuickCheck
-{- Monada Maybe este definita in GHC.Base 
+-- >= aplica si pastreaza tipul de apel
+-- >> transforma 
+-- (Just 3) >>= (\ x -> if (x>0) then Just (x*x) else Nothing) => Just 9
+-- (Just 3) >> (Just 6) => Just 6
+-- <=< compunere inversa
+-- f <=< g $ 3 => Just 10 (il ia pe 3, ii aplica g, si valorii obtinute ii aplica f)
 
-instance Monad Maybe where
-  return = Just
-  Just va  >>= k   = k va
-  Nothing >>= _   = Nothing
-
-
-instance Applicative Maybe where
-  pure = return
-  mf <*> ma = do
-    f <- mf
-    va <- ma
-    return (f va)       
-
-instance Functor Maybe where              
-  fmap f ma = pure f <*> ma   
--}
+-- Functii peste testare cu QuickCheck
+f :: Int -> Maybe Int
+f x = if x >2 then Just (x+1) else Nothing
+g :: Int -> Maybe Int
+g x = if x>0 then Just (x*x) else Nothing
+h :: Int -> Maybe Int
+h x = if x<0 then Just (x `div` 2) else Nothing
 
 (<=<) :: (a -> Maybe b) -> (c -> Maybe a) -> c -> Maybe b
 f <=< g = (\ x -> g x >>= f)
 
-f,g,h ::Int -> Maybe Int
-f = \x->if (x>0) then Just (x+3) else Nothing
-g = \x-> if (x>2) then Just(x-3) else Nothing
-h = \x-> if (x<2) then Just (x+x) else Nothing
--- f<=< g $ 3 => Nothing
--- f<=< g $ 4 => Just 4
-ex = (\x -> if x>'a' then Just 1 else Nothing) <=< (\x-> if x>0 then Just ('a') else Nothing)
---ex $ 3 => Nothing ca-l face mereu pe g (al doilea)
-
---prorietatea de asociativitate pt compunerea functiilor
 asoc :: (Int -> Maybe Int) -> (Int -> Maybe Int) -> (Int -> Maybe Int) -> Int -> Bool
-asoc f g h x = (h <=< (g <=< f) $ x) ==((h <=< g) <=< f $ x)
--- *Main> quickCheck (asoc f g h)
--- +++ OK, passed 100 tests.
-
---comutativitate nu e pt compunerea functiilor
-comm :: (Int -> Maybe Int) -> (Int -> Maybe Int) ->  Int -> Bool
-comm f g x = ((g <=< f) $ x )==((f <=< g) $ x)
--- quickCheck (comm f g)
--- *** Failed! Falsified (after 2 tests): 1
+asoc f g h x = ((f <=< g) <=< h $ x) == (f <=< (g <=< h) $ x )
+-- Testare proprietate : quickCheck (asoc f g h)
 
 pos :: Int -> Bool
 pos  x = if (x>=0) then True else False
 
 foo :: Maybe Int ->  Maybe Bool 
-foo  mx =  mx  >>= (\x -> return (pos x))  
--- foo (Just 3) => Just True
--- foo nothing => Nothing
+foo  mx =  mx  >>= (\x -> Just (pos x)) 
 
-fooDo :: Maybe Int ->  Maybe Bool  
-fooDo mx=do
-            x <- mx --scot valoarea din cutie
-            return (pos x) --il pun in cutie
+-- Notatia DO ------
+fooDo :: Maybe Int ->  Maybe Bool
+fooDo mx = do
+      x <- mx
+      return (pos x)
 
+addMSabloane :: Maybe Int -> Maybe Int -> Maybe Int  
+addMSabloane (Just x) (Just y) = Just (x+y)
+addMSabloane _ _ = Nothing
 
-addM1 :: Maybe Int -> Maybe Int -> Maybe Int  
-addM1 mx my = do
-                x<-mx
-                y<-my
-                return (x+y) --merge si Just(x+y)
---addM (Just 3) (Just 2) => Just 5
+addMDo :: Maybe Int -> Maybe Int -> Maybe Int
+addMDo x y = do
+      a <- x -- din x = (Just a) scot a
+      b <- y -- din y = (Just b) scot b
+      return (a+b)  -- din (a+b) fac Just(a+b)
 
-addM2 :: Maybe Int -> Maybe Int -> Maybe Int  
-addM2 Nothing _ = Nothing
-addM2 _ Nothing = Nothing
-addM2 (Just x)(Just y)=Just (x+y)
+test :: Maybe Int -> Maybe Int -> Bool
+test x y = addMDo x y == addMSabloane x y
+-- quickCheck test
 
-addM3 :: Maybe Int -> Maybe Int -> Maybe Int 
-addM3 mx my = mx >>= (\x -> ( my >>= (\y -> return (x+y)) ) ) 
+-- Tranformare functii normale in notatie do ---
+-- TIP: operatorul >>= se inlocuieste cu <- in do
+cartesian_product :: [a] -> [b] -> [(a,b)]
+cartesian_product xs ys = xs >>= ( \x -> (ys >>= \y-> return (x,y)))
 
-prop a b = addM1 a b == addM2 a b && addM2 a b == addM3 a b
--- *Main> quickCheck prop
--- +++ OK, passed 100 tests.
+cpDo :: [a] -> [b] -> [(a,b)]
+cpDo xs ys = do
+      x <- xs
+      y <- ys
+      return (x,y)
 
-cp xs ys = xs >>= ( \x -> (ys >>= \y-> return (x,y)))
-cpdo :: Monad m => m a -> m b -> m(a,b)
-cpdo xs ys =do
-              x<-xs
-              y<-ys
-              return (x,y)
---cpdo (Just 3) (Just 4) => Just (3,4)
---cpdo [1,2] [3,4] -> [(1,3), (1,4), (2,3), (2,4)]
+prod f xs ys = [f x y | x <- xs, y<-ys] -- fiecare elem din xs cu toate din ys
 
-prod f xs ys = [f x y | x <- xs, y<-ys]
-prod1 f xs ys = xs >>= \x -> [f x y | y <- ys]
--- *Main> prod1 (+) [1,2] [3,4]
--- [4,5,5,6]
-prod2 f xs ys = xs >>= \x ->( ys >>= \y -> return (f x y ))
+-- functie pentru test
+func x y = x + y
 
+prodDo f xs ys = do
+      x <- xs
+      y <- ys
+      return (f x y) -- intoarce automat lista pt ca List e monada
+
+-- TIP: operatorul >>= se inlocuieste cu <- in do
+      -- nume1 >>= \nume2 => nume2 <- nume1
 myGetLine :: IO String
 myGetLine = getChar >>= \x -> if x == '\n' then return [] else myGetLine >>= \xs -> return (x:xs)
 
-myGetLinedo :: IO String
-myGetLinedo = do 
-                x<- getChar
-                if x== '\n' then return [] else
+getDo :: IO String
+getDo = do
+      x <- getChar
+      if x == '\n' then 
+            return [] 
+            else 
                   do
-                    xs <- myGetLinedo
-                    return (x:xs)
--- *Main> myGetLinedo
--- ionel
--- "ionel"
+                        xs<- getDo
+                        return (x:xs)
 
+-- Transformare din DO in functii normale --
+-- TIP: >> operator de legatura instructiunilor pentru transformarea din DO
 prelNo noin = sqrt noin
+
 ioNumber = do
-            noin <- readLn :: IO Float
-            putStrLn $ "Intrare\n" ++ (show noin)
-            let noout = prelNo noin
-            putStrLn $ "Iesire"
-            print noout
-ioNumberM =(readLn :: IO Float) >>=
+      noin <- readLn :: IO Float
+      putStrLn $ "Intrare\n" ++ (show noin)
+      let noout = prelNo noin
+      putStrLn $ "Iesire"
+      print noout
+
+ioDo =(readLn :: IO Float) >>=
               \noin -> putStrLn ("Intrare\n" ++ show noin) >>
                 let noout = prelNo noin in putStrLn "Iesire" >> print noout
--- *Main> ioNumberM
---2
---Intrare
---2.0
---Iesire
---1.4142135
+
+--- MAP cu monada Maybe ---
+mymap :: (a -> Maybe b) -> [a] -> Maybe [b]
+mymap f [] = return []
+mymap f (x:xs) = do
+                  y <- f x 
+                  ys <- mymap f xs
+                  return (y:ys)
