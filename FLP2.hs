@@ -1,3 +1,4 @@
+---- LABORATOR 2-----
 import Data.Maybe
 import Data.List 
 
