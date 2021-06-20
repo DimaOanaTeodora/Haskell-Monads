@@ -2,11 +2,11 @@
 ## Monads Labs
 
 :biohazard: [Class 1](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP1.hs)
-      - Mini-Haskell
-      - Counter
+   - Mini-Haskell
+   - Counter
  
 :biohazard: [Class 2](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP2.hs)
-      - Statements
+   - Statements
  
 :biohazard: Class 3
 
