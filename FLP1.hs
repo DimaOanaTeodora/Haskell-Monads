@@ -1,4 +1,4 @@
--- LABORATOR 1--
+--- LABORATOR 1 ---
 -- Mediu de evaluare (Env) == memoria
 data Prog = On Instr
 
