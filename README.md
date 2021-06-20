@@ -53,6 +53,13 @@
       - interpretor mini Haskell for Either String Monad with data Value
       - test programs
       - show function (system defined for Either String) 
+   * [List Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mList.hs)
+   
+      - List Monad (is system defined)
+      - data Value
+      - interpretor mini Haskell for List Monad with data Value
+      - test program
+      - show function (system defined for List) 
    * []()
 :biohazard: []()
 :biohazard: []()
