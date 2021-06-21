@@ -1,50 +1,68 @@
 {-
-Gasiti mai jos  un minilimbaj. Interpretarea este partial definita.
-Un program este o expresie de tip Pgmiar rezultatul executiei este ultima stare a memoriei. 
-Executia unui program se face apeland pEval.
+Finalizati definitia functiilor de interpretare.
+Adaugati instructiunea While BExp Stmt si interpretarea ei.
 -}
-
 import Data.Maybe
 import Data.List
 
 type Name = String
 
-data  Pgm  = Pgm [Name] Stmt
+data Pgm  = Pgm [Name] Stmt
         deriving (Read, Show)
 
-data Stmt = Skip | Stmt ::: Stmt | If BExp Stmt Stmt| Name := AExp
-        deriving (Read, Show)
+data BExp = BTrue 
+  | BFalse 
+  | AExp :==: AExp 
+  | Not BExp
+  deriving (Read, Show)
 
-data AExp = Lit Integer | AExp :+: AExp | AExp :: AExp | Var Name
-        deriving (Read, Show)
+data Stmt = Skip 
+  | Stmt ::: Stmt 
+  | If BExp Stmt Stmt
+  | Name := AExp
+  | While BExp Stmt
+  deriving (Read, Show)
 
-data BExp = BTrue | BFalse | AExp :==: AExp | Not BExp
-        deriving (Read, Show)
+data AExp = Lit Integer 
+  | AExp :+: AExp 
+  | AExp :*: AExp 
+  | Var Name
+  deriving (Read, Show)
 
 infixr 2 :::
 infix 3 :=
 infix 4 :==:
 infixl 6 :+:
-infixl 7 ::
+infixl 7 :*:
 
 
-type Env = [(Name, Integer)]
+type Env = [(Name, Integer)] -- [(String, Integer)]
 
 aEval :: AExp -> Env -> Integer
-aEval = undefined
+aEval (Lit n) _ = n
+aEval (aexp1 :+: aexp2) env = (aEval aexp1 env) + (aEval aexp2 env)
+aEval (aexp1 :*: aexp2) env = (aEval aexp1 env) * (aEval aexp2 env)
+aEval (Var string) env = aux (lookup string env)
+  where
+    aux (Just n) = n 
+    aux Nothing = error "Eroare lookup"
 
 bEval :: BExp -> Env -> Bool
-bEval = undefined
+bEval BTrue env = True
+bEval BFalse env = False
+bEval (aexp1 :==: aexp2) env = (aEval aexp1 env) == (aEval aexp2 env)
+bEval (Not bexp) env = not (bEval bexp env)
 
 sEval :: Stmt -> Env -> Env
 sEval Skip env = env
-sEval (st1 ::: st2) env = undefined
+sEval (st1 ::: st2) env = (sEval st1 env) ++ (sEval st2 env)
 sEval (If b st1 st2) env =  if (bEval b env) then (sEval st1 env) else (sEval st2 env) 
-sEval (x := e) env = undefined
+sEval (string := aexp) env = (string, aEval aexp env) : [(x, value) | (x, value) <- env, x /= string ]
+sEval (While bexp st) env = if bEval bexp env then sEval (st ::: While bexp st) env else sEval Skip env
 
 
 pEval :: Pgm -> Env
-pEval (Pgm lvar st) = undefined
+pEval (Pgm lvar st) = sEval st [(x,0) | x<- lvar] --  initializate memorie cu 0 
 
 
  
@@ -55,8 +73,11 @@ factStmt =
     ( "p" := Var "p" :*: Var "n" :::
       "n" := Var "n" :+: Lit (-1)
     )
+test2 = Pgm ["p", "n"] ("p" := Var "p" :*: Var "n" :::"n" := Var "n" :+: Lit (-1))
+-- [("p",0),("n",0),("n",-1),("p",0)]
 
-test1 = Pgm [] factStmt 
+test1 = Pgm ["p", "n"] factStmt 
+-- [("p",1),("n",0),("n",3),("p",0),("p",0),("n",0)] 
 
 {-CERINTE
 
