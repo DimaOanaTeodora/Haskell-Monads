@@ -1,4 +1,3 @@
-
 {-
 ---------- Ex 1 si 2 ----------
   - finalizati definitia functiilor de interpretare 
