@@ -63,10 +63,15 @@
    * [EnvReader Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mEnvReader.hs)
       
       - Reader Monad with environment 
-      - interp function with one argument
-      - ask, local - 2 auxliar functions for EnvReader
+      - interpretor function with one argument
+      - ask, local - 2 auxliary functions for EnvReader
  
-   * []()
+   * [Writer Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriterL.hs)
+   
+      - tell auxiliary function for output a message 
+      - interpretor mini Haskell for Writer Monad with data Value
+      - test program
+      - show function 
    * []()
 ### :biohazard: [Class 6]()
 ### :biohazard: [Class 7]()
