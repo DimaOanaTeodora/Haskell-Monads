@@ -1,12 +1,17 @@
 # Haskell Course :crystal_ball:
 ## Monads Labs
 
-* [Lab 1]()
-* [Lab 2]()
-* [Lab 3]()
-* [Lab 4-5]()
-* [Lab 6]()
-* [Lab 7]()
+* [Lab 1](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/lab1.pdf)
+* [Lab 2](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/lab2.pdf)
+* [Lab 3](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/lab3.pdf)
+* [Lab 4-5](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/lab4-5.pdf)
+* [Lab 6](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/lab6.pdf)
+* [Lab 7](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/lab7.pdf)
+
+## Tests + Solutions: 
+
+* [Var 1]()
+* [Var 2]()
 
 ## :arrow_down: Haskell Code :arrow_down:
 
@@ -92,7 +97,7 @@
    * [Module SIMPLE](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP6SIMPLE.hs)
    * [Simple Type Checker](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP6.hs)
    
-### :biohazard: [Class 7]()
+### :biohazard: Class 7
    * [Module SIMPLE](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP6SIMPLE.hs)
    * [Interpretor SIMPLE Module](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP7.hs)
 
