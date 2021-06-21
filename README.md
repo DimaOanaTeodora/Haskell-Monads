@@ -12,6 +12,9 @@
 
 * [Var 1](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/Colocviu1.hs)
 * [Var 2](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/Colocviu2.hs)
+* [Var 3](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/Colocviu3.hs)
+* [Var 4](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/Colocviu4.hs)
+* [Var 5](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/Colocviu5.hs)
 
 ## :arrow_down: Haskell Code :arrow_down:
 
