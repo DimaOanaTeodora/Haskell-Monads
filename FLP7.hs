@@ -43,7 +43,6 @@ data ImpState = ImpState
 -- gaseste valoarea corespunzatoare unei chei
   
  
-
 compose :: Ord b => Map b c -> Map a b -> Map a c
 compose bc ab
   | null bc = Map.empty
