@@ -33,30 +33,30 @@
  
 ### :biohazard: Class 3
 
-  * [Maybe Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mMaybe.hs)
+  ### * [Maybe Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mMaybe.hs)
   
       - Just, Nothing
       - transformations DO
       - tests with QuickCheck module
       - my map
       
-  * [Writer String Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriter.hs)
+  ### * [Writer String Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriter.hs)
   
       - log-increment functions
       
-  * [Writer List Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriterL.hs)
+  ### * [Writer List Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriterL.hs)
   
       - log-increment functions
       - normal map
       - my map
       
-  * [Reader Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mReader.hs)
+  ### * [Reader Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mReader.hs)
   
       - show a Person (data)
       - show a Person (Reader monad)
       
 ### :biohazard: Class 4-5 
-   * [Identity Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mIdentity.hs)
+  ### * [Identity Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mIdentity.hs)
    
    ```
    newtype Identity a = Identity { runIdentity :: a }
@@ -67,7 +67,7 @@
    - test program
    - show function for Identity monad
    
-   * [Maybe Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mMaybe.hs)
+  ### * [Maybe Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mMaybe.hs)
    
    ```
    term0 = (App (Lam "x" (Var "x" :+: Var "x")) (Con 10 :+: Con 11)) => Just 42
@@ -78,7 +78,7 @@
    - test programs
    - show function (system defined for Maybe) 
    
-   * [Either String Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mEitherString.hs)
+  ### * [Either String Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mEitherString.hs)
    
    ```
    term0 = (App (Lam "x" (Var "x" :+: Var "x")) (Con 10 :+: Con 11)) => Right 42
@@ -90,7 +90,7 @@
    - test programs
    - show function (system defined for Either String) 
   
-   * [List Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mList.hs)
+  ### * [List Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mList.hs)
    
    ```
    interp (App (Lam "x" (Var "x" :+: Var "x")) (Amb (Con 1) (Con 2)))) [] => [2,4]
@@ -101,7 +101,7 @@
    - test program
    - show function (system defined for List) 
       
-   * [EnvReader Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mEnvReader.hs)
+  ### * [EnvReader Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mEnvReader.hs)
    
    ```
    newtype EnvReader a = Reader { runEnvReader :: Environment -> a }
@@ -111,7 +111,7 @@
    - interpretor function with one argument
    - ask, local - 2 auxliary functions for EnvReader
  
-   * [Writer Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriterL.hs)
+  ### * [Writer Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriterL.hs)
    
    ```
    newtype StringWriter a = StringWriter { runStringWriter :: (a, String) }
@@ -122,7 +122,7 @@
    - test program
    - show function 
    
-   * [State Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mState.hs)
+  ### * [State Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mState.hs)
    
    ```
    newtype IntState a = IntState { runIntState :: Integer -> (a, Integer) }
