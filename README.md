@@ -72,7 +72,12 @@
       - interpretor mini Haskell for Writer Monad with data Value
       - test program
       - show function 
-   * []()
+   * [State Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mState.hs)
+   
+      - modify, get auxiliary functions 
+      - interpretor mini Haskell for State Monad with data Value
+      - test program
+      - show function 
 ### :biohazard: [Class 6]()
 ### :biohazard: [Class 7]()
 
