@@ -55,3 +55,57 @@ test3 = On [Push 6, Push 2, Pop, Plus]  -- "Nu sunt destule elemente"
 test4 = On [Pop] -- "Nu sunt elemente in stiva"
 test5 = On [Push 1, Push 2, Push 3, Push 4, Loop [Plus]] -- [10]
 
+
+{- 
+------- Ex 3 ------------
+Modificați interpretarea limbajului extins astfel incat interpretarea unui program / instrucțiune / expresie
+să nu mai arunce excepții, ci să aibă tipul rezultat `Maybe Env` / `Maybe Int`, unde rezultatul final în cazul în care
+execuția programului încearcă să scoată/acceseze o valoare din stiva de valori vidă va fi `Nothing`.
+Rezolvați subiectul în același fișier redenumind funcțiile de interpretare.    
+
+-}
+type M = Maybe -- nu mai trebuie scrisa pt ca e deja monada
+
+interpProg :: Prog -> M Env -- Prog -> Maybe (Just/Nothing) [Int]
+interpProg (On l) = interpStmts l (Just [])
+
+interpStmts :: [Stmt] -> M Env -> M Env
+interpStmts [] env = env
+interpStmts (h:t) env = let
+                    envNou = interpStmt h env
+                  in 
+                    interpStmts t envNou
+
+interpStmt :: Stmt -> M Env -> M Env -- Stmt -> Maybe [Int] -> Maybe [Int]
+interpStmt (Push n) Nothing = Nothing 
+interpStmt (Push n) (Just env) = return (env ++ [n]) -- interpStmt (Push 2) (Just []) => Just [2]
+
+interpStmt Pop Nothing = Nothing
+interpStmt Pop (Just [x]) = return []
+interpStmt Pop (Just env) = if testLength env 
+                              then return (head env : (stmt Pop (tail env))) 
+                                else Nothing -- interpStmt (Pop) (Just [2,3]) => Just [2]
+
+interpStmt Plus Nothing = Nothing
+interpStmt Plus (Just env) = if length env >= 2 then let 
+                                              x = env !! (length env -1)
+                                              y = env !! (length env -2)
+                                              envNou = stmt Pop env
+                                              envN = stmt Pop envNou
+                                              in 
+                                              return (envN ++ [x+y]) 
+                                              else Nothing -- interpStmt Plus (Just [1,2,3]) => Just [1,5]
+
+interpStmt Dup Nothing = Nothing
+interpStmt Dup (Just env) = return (env ++ [env !! (length env -1)]) 
+-- interpStmt Dup (Just [1,2]) => Just [1,2,2]
+
+interpStmt (Loop l ) Nothing = Nothing
+interpStmt (Loop l ) (Just env) = if (length env) <= 1 then return env else return (stmt (Loop l) (stmts l env))
+-- interpStmt(Loop [Plus]) (Just [1,2,3,4]) => Just [10] --aplica repetat plus pana la lungimea 1
+
+test6 = On [Push 3, Push 5, Plus] -- Just [8]
+test7 = On [Push 3, Push 5, Push 7] -- Just [3,5,7]
+test8 = On [Push 6, Push 2, Pop, Plus]  -- Nothing
+test9 = On [Pop] -- Nothing
+test10 = On [Push 1, Push 2, Push 3, Push 4, Loop [Plus]] -- Just [10]
