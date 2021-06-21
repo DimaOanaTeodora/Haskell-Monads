@@ -1,10 +1,10 @@
 module Checker where
 
-
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 
 import FLP6SIMPLE
+------------------------------------------
 
 data Type = TInt | TBool
   deriving (Eq)
@@ -12,16 +12,15 @@ data Type = TInt | TBool
 instance Show Type where
     show TInt = "int"
     show TBool = "bool"
--- Name e String in SIMPLE
--- Type definit mai sus
+
 type CheckerState = Map Name Type
 
 -- Functia de verificare va asocia unei 
--- constructii sintactice o valoare M Type,
--- unde M este o monada iar Type este un tip
+-- constructii sintactice o valoare M Type
 emptyCheckerState :: CheckerState
 emptyCheckerState = Map.empty
----------------Monada-------------------
+
+---------------Monada Reader-------------------
 -- combinatie monada reader si either(left si right)
 newtype EReader a =
     EReader { runEReader :: CheckerState ->  (Either String a) }
@@ -47,10 +46,9 @@ instance Applicative EReader where
     pure = return
     mf <*> ma = do { f <- mf; a <- ma; return (f a)}
 
--- astea apar de la reader
--- intoarce ca valoare starea curenta 
+-- functia ask
 askEReader :: EReader CheckerState
-askEReader =EReader (\env -> Right env)
+askEReader = EReader (\env -> Right env)
 
 localEReader :: (CheckerState -> CheckerState) -> EReader a -> EReader a
 localEReader f ma = EReader (\env -> (runEReader ma) (f env))
@@ -60,7 +58,7 @@ type M = EReader
 
 -- functie auxiliara
 -- vad daca obtin ce vreau sa obtin 
--- daca nu obtin arunc o eroare prin aruncarea unei erori
+-- daca nu obtin arunc o eroare 
 expect :: (Show t, Eq t, Show e) => t -> t -> e -> M ()
 -- tip pe care il astept
 -- tip pe care il primesc in urma evaluarii
@@ -75,7 +73,7 @@ expect tExpect tActual e =
 lookupM :: Name -> M Type
 lookupM x =do
             env <- askEReader -- imi da mediul de evaluare
-            case Map.lookup x env of --ma folosesc de lookup din Map
+            case Map.lookup x env of -- ma folosesc de lookup din Map
                 Just val -> return val
                 Nothing -> throwError ("Variabila " ++ x ++ " nu a fost declarata") 
             
@@ -119,7 +117,7 @@ checkExp (BinE _ e1 e2) = do
 -- runEReader (checkExp (UMin (Id "y"))) $ Map.insert "y" TBool emptyCheckerState => Left "Type mismatch. Expected int but got bool for y"
 
 checkStmt :: Stmt -> M ()
-checkStmt (Block sts) = checkBlock sts -- sts =lista de instructiuni
+checkStmt (Block sts) = checkBlock sts -- sts = lista de instructiuni
 checkStmt (Decl _ _ ) = return () -- ea e cea care fixeaza tipul
 -- diferenta dintre Decl si Asgn
 checkStmt (Asgn name e ) = do
