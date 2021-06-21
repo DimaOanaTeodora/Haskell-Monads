@@ -1,6 +1,15 @@
 # Haskell Course :crystal_ball:
 ## Monads Labs
 
+* [Lab 1]()
+* [Lab 2]()
+* [Lab 3]()
+* [Lab 4-5]()
+* [Lab 6]()
+* [Lab 7]()
+
+## :arrow_down: Haskell Code :arrow_down:
+
 ### :biohazard: [Class 1](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP1.hs)
    - Mini-Haskell
    - Counter
@@ -84,4 +93,6 @@
    * [Simple Type Checker](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP6.hs)
    
 ### :biohazard: [Class 7]()
+   * [Module SIMPLE](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP6SIMPLE.hs)
+   * [Interpretor SIMPLE Module](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP7.hs)
 
