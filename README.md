@@ -33,24 +33,24 @@
  
 ### :biohazard: Class 3
 
-  ### * [Maybe Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mMaybe.hs)
+  * [Maybe Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mMaybe.hs)
   
       - Just, Nothing
       - transformations DO
       - tests with QuickCheck module
       - my map
       
-  ### * [Writer String Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriter.hs)
+  * [Writer String Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriter.hs)
   
       - log-increment functions
       
-  ### * [Writer List Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriterL.hs)
+  * [Writer List Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriterL.hs)
   
       - log-increment functions
       - normal map
       - my map
       
-  ### * [Reader Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mReader.hs)
+  * [Reader Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mReader.hs)
   
       - show a Person (data)
       - show a Person (Reader monad)
