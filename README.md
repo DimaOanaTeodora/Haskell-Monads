@@ -10,8 +10,8 @@
 
 ## Tests + Solutions: 
 
-* [Var 1]()
-* [Var 2]()
+* [Var 1](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/Colocviu1.hs)
+* [Var 2](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/Colocviu2.hs)
 
 ## :arrow_down: Haskell Code :arrow_down:
 
