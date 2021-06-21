@@ -78,6 +78,10 @@
       - interpretor mini Haskell for State Monad with data Value
       - test program
       - show function 
-### :biohazard: [Class 6]()
+### :biohazard: Class 6
+
+   * [Module SIMPLE](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP6SIMPLE.hs)
+   * [Simple Type Checker](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP6.hs)
+   
 ### :biohazard: [Class 7]()
 
