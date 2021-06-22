@@ -1,5 +1,5 @@
 {-
----------- Ex 1 si 2 ----------
+---------- Ex 1 si 2 ---------
   - finalizati definitia functiilor de interpretare 
   - aruncați excepții dacă stiva nu are suficiente valori 
   - adaugati instrucțiunea `Loop ss` care evaluează repetat lista de instrucțiuni ss
