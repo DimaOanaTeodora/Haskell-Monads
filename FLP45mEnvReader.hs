@@ -1,5 +1,7 @@
 --- Monada EnvReader
-
+-- contine mediul de evaluare => dispare ca parametru
+-- functia interp are doar 2 parametrii
+-- o noua functie pentru lookup
 newtype EnvReader a = Reader { runReader :: Environment -> a}
 
 instance Monad EnvReader where 
@@ -26,10 +28,10 @@ ask = Reader id
 local :: (Environment -> Environment) -> EnvReader a -> EnvReader a
 local f ma =  Reader g
               where
-                g env = (runReader ma) (f env)  -- pastrez actiunea functiei asupra mediului modificat prin f
+                g env = (runReader ma) (f env)  
+                -- pastrez actiunea functiei asupra mediului modificat prin f
 
 --- Limbajul si  Interpretorul
-
 type M = EnvReader
 
 type Name = String
@@ -53,45 +55,42 @@ instance Show Value where -- ma uit la data Value
 type Environment = [(Name, Value)]
 
 showM :: Show a => M a -> String
-showM ma = show $ runReader ma [] -- trebuie pus [] de la mediul de evaluare
+showM ma = show $ runReader ma [] 
 
--- contine deja mediul de evaluare
-interp :: Term -> M  Value -- Term -> EnvReader Value
+-- Contine deja mediul de evaluare
+interp :: Term -> M  Value -- NOU
+-- Term -> EnvReader Value
 interp (Con n)  = return (Num n)
-interp (Var string) = lookupAux string
--- (lookup string env) => Maybe Value : Num Integer, Fun, Wrong..
-      where
-            lookupAux strin = do
-                  env <- ask
+interp (Var string) = do -- NOU
+                  env <- ask -- iau mediul de evaluare (care este constant)
                   case lookup string env of     
                     Just val -> return val     
                     Nothing -> return Wrong
 
 interp (t1 :+: t2) = do
-      -- (interp t1 env) => Identity Value, ci NU un Value simplu => am nevoie de do
-       x <- interp t1 
+       x <- interp t1 --NOU : fara mediu de evaluare
        y <- interp t2 
-       return (add x y) -- return il baga in Identity si add aduna doua valori de tipul Value si intoarce tot un Value
-       where 
-             add (Num x) (Num y) = Num (x+y)
-             add _ _ = Wrong  
+       auxsum x y
+       where
+        auxsum (Num n1)(Num n2) = return (Num (n1+n2))
+        auxsum _ _ = return Wrong 
 
 interp (Lam string t) = do
-                        env <- ask -- iau env cu ask
+                        env <- ask -- NOU
                         return $ Fun  (\v -> let f = \env -> ((string,v): env) in (local f ( interp t)))
-                      -- Fun :: Value -> M Value
+                        -- Fun :: Value -> M Value
       
 interp (App t1 t2)  = do
--- (interp t1 env) => Identity Value, ci NU un Value simplu => am nevoie de do
-       f <- interp t1 
+       f <- interp t1 --NOU : fara mediu de evaluare
        x <- interp t2 
-       app f x 
-       where 
-             app (Fun func) x = func x
-             app _ _ = return Wrong  -- nu mai dau return sus
+       auxapp f x 
+       where
+        auxapp (Fun f) value = f value -- Fun (Value -> M Value)
+        auxapp _ _ = return Wrong
 
-pgm1:: Term
-pgm1 = App
-          (Lam "x" ((Var "x") :+: (Var "x")))
-          ((Con 10) :+:  (Con 11))
--- showM $ interp pgm1 => "42"
+test :: Term -> String
+test t = showM $ interp t -- NOU : dispare mediul de evaluare
+
+term0:: Term
+term0 = App (Lam "x" ((Var "x") :+: (Var "x"))) ((Con 10) :+:  (Con 11))
+-- test term0 => "42"
