@@ -34,6 +34,14 @@
    - Operators := and :
  
 ### :biohazard: Class 3
+```
+ >= aplica si pastreaza tipul de apel
+ >> transforma 
+ <=< compunere inversa
+ (Just 3) >>= (\ x -> if (x>0) then Just (x*x) else Nothing) => Just 9
+ (Just 3) >> (Just 6) => Just 6
+ f <=< g $ 3 => Just 10 (il ia pe 3, ii aplica g, si valorii obtinute ii aplica f)
+```
 
   * [Maybe Monad](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mMaybe.hs)
   
