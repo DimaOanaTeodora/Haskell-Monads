@@ -107,7 +107,7 @@
   ### * [List Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mList.hs)
    
    ```
-   type M = [a]
+   type M a = [a]
    interp (App (Lam "x" (Var "x" :+: Var "x")) (Amb (Con 1) (Con 2)))) [] => [2,4]
    ```
    - List Monad (is system defined)
@@ -115,6 +115,7 @@
    - interpretor mini Haskell for List Monad with data Value
    - test program
    - show function (system defined for List) 
+   - New: Fail and Amb constructors
       
   ### * [EnvReader Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mEnvReader.hs)
    
