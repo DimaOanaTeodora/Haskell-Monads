@@ -76,7 +76,7 @@
    - data Value 
    - interpretor mini Haskell for Identity Monad with data Value
    - test program
-   - show function for Identity monad
+   - showM function for Identity monad
    
   ### * [Maybe Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mMaybe.hs)
    
@@ -121,6 +121,7 @@
   ### * [EnvReader Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mEnvReader.hs)
    
    ```
+   -> mediul de evaluare este vazut o stare care este citita atunci când avem nevoie de valorile variabilelor, dar nu este modificata.
    type M = EnvReader
    newtype EnvReader a = Reader { runEnvReader :: Environment -> a }
    term0 = (App (Lam "x" (Var "x" :+: Var "x")) (Con 10 :+: Con 11)) => "42"
@@ -128,10 +129,13 @@
    - Reader Monad with environment 
    - interpretor function with one argument (it contains the environment)
    - ask, local - 2 auxliary functions for EnvReader
+   - new function for lookup
+   - showM function 
  
-  ### * [Writer Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriterL.hs)
+  ### * [StringWriter Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mStringWriter.hs)
    
    ```
+   -> afisare de rezultate intermediare
    type M = StringWriter
    newtype StringWriter a = StringWriter { runStringWriter :: (a, String) }
    interp (Out (Con 41) :+: Out (Con 1)) [] => "Output: 41; 1; Value: 42"
@@ -139,11 +143,14 @@
    - tell auxiliary function for output a message 
    - interpretor mini Haskell for Writer Monad with data Value
    - test program
-   - show function 
+   - showM function 
+   - New: Out constructor and ShowM function
+   - instance Show-StrinWriter 
    
   ### * [State Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mState.hs)
    
    ```
+   -> numarul de pasi necesari pentru calcularea rezultatului (numar doar la adunar si aplicare de functie)
    type M = InState
    newtype IntState a = IntState { runIntState :: Integer -> (a, Integer) }
    interp ((Con 1 :+: Con 2) :+: Count) [] => "Value: 4; Count: 2"
@@ -151,7 +158,8 @@
    - modify, get auxiliary functions 
    - interpretor mini Haskell for State Monad with data Value
    - test program
-   - show function 
+   - showM function 
+   - new: Count constructor and ```modify(+1) >>``` for modifying the counter
       
 ### :biohazard: Class 6
 
