@@ -126,7 +126,7 @@
    term0 = (App (Lam "x" (Var "x" :+: Var "x")) (Con 10 :+: Con 11)) => "42"
    ```
    - Reader Monad with environment 
-   - interpretor function with one argument
+   - interpretor function with one argument (it contains the environment)
    - ask, local - 2 auxliary functions for EnvReader
  
   ### * [Writer Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriterL.hs)
