@@ -160,7 +160,13 @@
    - interpretor mini Haskell for State Monad with data Value
    - test program
    - showM function 
-   - new: Count constructor and ```modify(+1) >>``` for modifying the counter
+   - new: Count constructor and ```modify(+1)``` for modifying the counter
+   ```
+   Cand le folosesc?
+      modify(+1) >> se foloseste fara DO
+      modify(+1) se foloseste in DO
+   ```
+   
       
 ### :biohazard: Class 6
 
