@@ -17,12 +17,12 @@ instance Applicative InState where
 instance Functor InState where
   fmap f ma = pure f <*> ma
 
-get :: InState Integer --get intoarce starea ca valoare get:: State state state
+get :: InState Integer -- NOU
 get = State ( \s -> (s,s)) 
 -- functie asemanatoare cu ask
 -- folosit la numararea operatiilor prin Count ca altfel ramane 0
 
-modify :: (Integer -> Integer) -> InState () 
+modify :: (Integer -> Integer) -> InState () -- NOU
 modify f = State (\s -> ((), f s)) -- primeste o stare si schimba starea prin aplicarea lui f
 
 --- Limbajul si  Interpretorul
@@ -36,7 +36,7 @@ data Term = Var Name
           | Term :+: Term
           | Lam Name Term
           | App Term Term
-          | Count -- modific aici -> numara operatiile
+          | Count -- NOU: numara operatiile
   deriving (Show)
 
 
@@ -52,43 +52,38 @@ instance Show Value where
 type Environment = [(Name, Value)]
 
 interp :: Term -> Environment -> M Value -- Term -> [(String, Value)] -> InState Value
-interp (Var name) env = aux name env
-            where
-              aux name env = case lookup name env of     
-                              Just val -> return val     
-                              Nothing ->  return Wrong
-interp (Con const) _ = return (Num const)
-interp Count _ = do -- count nu depinde de mediu (env) pt ca el e starea 
+interp (Var name) env = aux (lookup name env)
+  where 
+    aux (Just val) = return val     
+    aux Nothing = return Wrong
+interp (Con n) env = return (Num n)
+interp Count env = do -- NOU: count nu depinde de mediu (env) pt ca el e starea 
                   s <- get -- iau starea
                   return (Num s) 
-interp (x1 :+: x2) env = do 
-                          v1 <- interp x1 env
-                          v2 <- interp x2 env
-                          auxsum v1 v2
-                          where
-                            --trebuie sa maresc count-ul ca altfel merge dar e mereu 0
-                            auxsum (Num i) (Num j) = modify(+1) >>  return (Num (i + j)) 
-                            auxsum _ _ = return Wrong
+interp (t1 :+: t2) env = do
+  x <- interp t1 env -- x de tipul Value
+  y <- interp t2 env -- y de tipul Value
+  auxsum x y
+  where
+    -- trebuie sa maresc contuarul, altfel e mereu 0
+    auxsum (Num n1)(Num n2) = modify(+1) >>  return (Num (n1+n2)) --NOU
+    auxsum _ _ = return Wrong
+interp (Lam string t) env = return $ Fun $ \v -> interp t ((string,v):env)
+interp (App t1 t2) env = do
+  x <- interp t1 env
+  y <- interp t2 env
+  auxapp x y 
+  where
+      -- trebuie sa maresc contuarul, altfel e mereu 0
+      auxapp (Fun f) value = modify(+1) >> f value -- NOU
+      auxapp _ _ = return Wrong
 
-interp (Lam x exp) env = return $ Fun $ \v -> interp exp ((x,v):env)
-interp (App x1 x2) env = do
-                          f <- interp x1 env
-                          val <- interp x2 env
-                          apply f val
-                          where
-                            --si aici modific starea (count-ul) prin modify
-                            apply (Fun k) v = modify(+1) >>  k v 
-                            apply _ _ = return Wrong
-
-
-showM :: Show a => M a -> String
-showM ma = let (va, s)=(runState ma 0 ) in ("Value: " ++ (show va) ++" Count: " ++ (show s))
+showM :: Show a => M a -> String 
+showM ma = let (va, s)=(runState ma 0 ) in ("Value: " ++ (show va) ++" Count: " ++ (show s)) --NOU
 
 test :: Term -> String
 test t = showM $ interp t []
 
-pgm1:: Term
-pgm1 = App
-          (Lam "x" ((Var "x") :+: (Var "x")))
-          ((Con 10) :+:  (Con 11))
---test pgm1 => "Value: 42 Count: 3"
+term0 :: Term
+term0 = App (Lam "x" ((Var "x") :+: (Var "x"))) ((Con 10) :+:  (Con 11))
+-- test term0 => "Value: 42 Count: 3"
