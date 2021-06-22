@@ -31,7 +31,7 @@
 
    - Statements
    - While 
-   - Operator :=
+   - Operators := and :
  
 ### :biohazard: Class 3
 
