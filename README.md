@@ -121,7 +121,8 @@
   ### * [EnvReader Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mEnvReader.hs)
    
    ```
-   -> mediul de evaluare este vazut o stare care este citita atunci când avem nevoie de valorile variabilelor, dar nu este modificata.
+   -> mediul de evaluare este vazut o stare care este citita atunci când avem nevoie de valorile variabilelor
+   -> dar starea nu va fi modificata(imutabila)
    type M = EnvReader
    newtype EnvReader a = Reader { runEnvReader :: Environment -> a }
    term0 = (App (Lam "x" (Var "x" :+: Var "x")) (Con 10 :+: Con 11)) => "42"
@@ -150,7 +151,7 @@
   ### * [State Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mState.hs)
    
    ```
-   -> numarul de pasi necesari pentru calcularea rezultatului (numar doar la adunar si aplicare de functie)
+   -> numarul de pasi necesari pentru calcularea rezultatului (numar doar la adunare si aplicare de functie)
    type M = InState
    newtype IntState a = IntState { runIntState :: Integer -> (a, Integer) }
    interp ((Con 1 :+: Con 2) :+: Count) [] => "Value: 4; Count: 2"
