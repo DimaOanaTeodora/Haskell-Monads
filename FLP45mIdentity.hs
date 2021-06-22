@@ -1,6 +1,6 @@
---- Monada Identity
+--- Monada Identity -- Interpretorul monadic general
 
-newtype Identity a = Identity { runIdentity :: a }
+newtype Identity a = Identity { runIdentity :: a } 
 
 instance Monad Identity where
   return va = Identity va 
@@ -16,7 +16,10 @@ instance Applicative Identity where
 instance Functor Identity where
   fmap f ma = pure f <*> ma
 
+
 --- Limbajul si  Interpretorul
+
+type M = Identity
 
 type Name = String
 
@@ -28,49 +31,45 @@ data Term = Var Name
   deriving (Show)
 
 data Value = Num Integer
-           | Fun (Value -> M Value)
+           | Fun (Value -> M Value) -- Value -> Identity Value
            | Wrong
 
-instance Show Value where
+instance Show Value where 
  show (Num x) = show x
  show (Fun _) = "<function>"
  show Wrong   = "<wrong>"
 
-type Environment = [(Name, Value)] -- [(String, Value)]
-
-type M = Identity
+type Environment = [(Name, Value)] --[(String, Value)]
 
 showM :: Show a => M a -> String
 showM ma = show (runIdentity ma)
 
-interp :: Term -> Environment -> M Value
--- Term -> [(String, Value)] -> Identity Value
+interp :: Term -> [(Name, Value)] -> M Value
+-- Term -> [(String, Value)] ->  Identity Value
+interp (Var string) env = aux (lookup string env)
+  where
+    aux (Just value) = return value -- Identity Value
+    aux Nothing = return Wrong
 interp (Con n) env = return (Num n)
-interp (Var string) env = aux (lookup string env )
--- (lookup string env) => Maybe Value : Num Integer, Fun, Wrong..
-      where
-            aux (Just value) = return value
-            aux Nothing = return Wrong
 interp (t1 :+: t2) env = do
-      -- (interp t1 env) => Identity Value, ci NU un Value simplu => am nevoie de do
-       x <- interp t1 env
-       y <- interp t2 env
-       return (add x y) -- return il baga in Identity si add aduna doua valori de tipul Value si intoarce tot un Value
-       where 
-             add (Num x) (Num y) = Num (x+y)
-             add _ _ = Wrong  
-
+  x <- interp t1 env -- x de tipul Value
+  y <- interp t2 env -- y de tipul Value
+  auxsum x y
+  where
+    auxsum (Num n1)(Num n2) = return (Num (n1+n2))
+    auxsum _ _ = return Wrong
 interp (Lam string t) env = return $ Fun $ \v -> interp t ((string,v):env)
 interp (App t1 t2) env = do
--- (interp t1 env) => Identity Value, ci NU un Value simplu => am nevoie de do
-       f <- interp t1 env
-       x <- interp t2 env
-       app f x 
-       where 
-             app (Fun func) x = func x
-             -- (Fun f)este de forma (Value -> M Value)
-             -- nu trebuie return ca fun transforma el automat in M Value
-             app _ _ = return Wrong  -- nu mai dau return sus
+  x <- interp t1 env
+  y <- interp t2 env
+  auxapp x y 
+  where
+      auxapp (Fun f) value = f value -- Fun (Value -> M Value)
+      auxapp _ _ = return Wrong
 
-term0 = (App (Lam "x" (Var "x" :+: Var "x")) (Con 10 :+: Con 11))
--- showM $ interp term0 [] => "42"
+test :: Term -> String
+test t = showM $ interp t []
+
+term0:: Term
+term0 = App (Lam "x" ((Var "x") :+: (Var "x"))) ((Con 10) :+:  (Con 11))
+-- test term0 => "42"
