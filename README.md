@@ -107,6 +107,7 @@
   ### * [List Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mList.hs)
    
    ```
+   -> intoarce lista raspunsurilor posibile
    type M a = [a]
    interp (App (Lam "x" (Var "x" :+: Var "x")) (Amb (Con 1) (Con 2)))) [] => [2,4]
    ```
