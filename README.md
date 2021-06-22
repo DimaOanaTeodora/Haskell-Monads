@@ -24,6 +24,7 @@
 
    - Mini-Haskell
    - Counter
+   - lambda 
  
 ### :biohazard: [Class 2](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP2.hs)
 
