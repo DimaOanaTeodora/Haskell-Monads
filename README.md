@@ -69,6 +69,7 @@
   ### * [Identity Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mIdentity.hs)
    
    ```
+   type M = Identity
    newtype Identity a = Identity { runIdentity :: a }
    term0 = (App (Lam "x" (Var "x" :+: Var "x")) (Con 10 :+: Con 11)) => "42"
    ```
@@ -80,6 +81,7 @@
   ### * [Maybe Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mMaybe.hs)
    
    ```
+   type M = Maybe
    term0 = (App (Lam "x" (Var "x" :+: Var "x")) (Con 10 :+: Con 11)) => Just 42
    ```
    - Maybe Monad (is system defined)
@@ -91,6 +93,7 @@
   ### * [Either String Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mEitherString.hs)
    
    ```
+   type M = Either String
    term0 = (App (Lam "x" (Var "x" :+: Var "x")) (Con 10 :+: Con 11)) => Right 42
    term1 = (App (Con 7) (Con 2)) [] => Left "should be function: 7"
    ```
@@ -103,6 +106,7 @@
   ### * [List Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mList.hs)
    
    ```
+   type M = [a]
    interp (App (Lam "x" (Var "x" :+: Var "x")) (Amb (Con 1) (Con 2)))) [] => [2,4]
    ```
    - List Monad (is system defined)
@@ -114,6 +118,7 @@
   ### * [EnvReader Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mEnvReader.hs)
    
    ```
+   type M = EnvReader
    newtype EnvReader a = Reader { runEnvReader :: Environment -> a }
    term0 = (App (Lam "x" (Var "x" :+: Var "x")) (Con 10 :+: Con 11)) => "42"
    ```
@@ -124,6 +129,7 @@
   ### * [Writer Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP3mWriterL.hs)
    
    ```
+   type M = StringWriter
    newtype StringWriter a = StringWriter { runStringWriter :: (a, String) }
    interp (Out (Con 41) :+: Out (Con 1)) [] => "Output: 41; 1; Value: 42"
    ```
@@ -135,6 +141,7 @@
   ### * [State Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mState.hs)
    
    ```
+   type M = InState
    newtype IntState a = IntState { runIntState :: Integer -> (a, Integer) }
    interp ((Con 1 :+: Con 2) :+: Count) [] => "Value: 4; Count: 2"
    ```
