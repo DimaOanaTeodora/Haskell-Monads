@@ -85,6 +85,7 @@ get :: InState Integer
 get = State ( \s -> (s,s)) 
 
 
+-- NU trebuie sa adaug vreun constructor Count
 modify :: (Integer -> Integer) -> InState () 
 modify f = State (\s -> ((), f s)) 
 
@@ -93,28 +94,35 @@ modify f = State (\s -> ((), f s))
 type M = InState
 
 showM :: Show a => M a -> String
-showM ma = let (va, s)=(runState ma 0 ) in ("Value: " ++ (show va) ++" Count: " ++ (show s))
+showM ma = let (va, s)=(runState ma 0 ) in ("Memorie finala:" ++ (show va) ++" Nr accesari:" ++ (show s))
 
-interExpr ::  Expr -> Env -> Int -- Expr -> (Int, Int) -> Int
-interExpr (M Mem1) (e1,e2) = e1
-interExpr (M Mem2) (e1,e2) = e2
-interExpr (V n) env = n
-interExpr (exp1 :+ exp2) env = (expr exp1 env) + (expr exp2 env)
+interExpr ::  Expr -> Env -> M Int -- Expr -> (Int, Int) -> M Int
+interExpr (M Mem1) (e1,e2) = modify (+1) >> return e1
+interExpr (M Mem2) (e1,e2) = modify (+1) >> return e2
+interExpr (V n) env = return n
+interExpr (exp1 :+ exp2) env = do
+  x <- interExpr exp1 env 
+  y <- interExpr exp2 env
+  return (x+y)
+interExpr (If1 exp1 exp2) (e1, e2) = modify (+1) >> if e1 /= 0 then interExpr exp1 (e1, e2) else interExpr exp2 (e1, e2)
+interExpr (If2 exp1 exp2) (e1, e2) = modify (+1) >> if e2 /= 0 then interExpr exp2 (e1, e2) else interExpr exp1 (e1, e2)
 
-interExpr (If1 exp1 exp2) (e1, e2) = if e1 /= 0 then expr exp1 (e1, e2) else expr exp2 (e1, e2)
-interExpr (If2 exp1 exp2) (e1, e2) = if e2 /= 0 then expr exp2 (e1, e2) else expr exp1 (e1, e2)
-
-interStmt :: Stmt -> Env -> M Env
+interStmt :: Stmt -> Env -> M Env -- Stmt -> (Int, Int) -> M (Int, Int)
 interStmt Off env = return env
-interStmt (exp :<< st) (e1, e2) = let 
-                                valExp = interExpr exp (e1,e2)
-                                envNou = (valExp, e2) 
-                              in
-                                return (interStmt st envNou)
-interStmt (exp :< st) (e1, e2) = let 
-                                valExp = interExpr exp (e1,e2)
-                                envNou = (e1, valExp) 
-                            in
-                              return (interStmt st envNou)
+interStmt (exp :<< st) (e1, e2) = do 
+                                valExp <- interExpr exp (e1,e2)
+                                modify (+1)
+                                interStmt st (valExp, e2)
+interStmt (exp :< st) (e1, e2) = do 
+                                valExp <- interExpr exp (e1,e2)
+                                modify (+1) 
+                                interStmt st (e1, valExp)
 interProg :: Prog -> M Env
 interProg (On env st) = interStmt st env 
+
+test :: Prog -> String
+test t = showM $ interProg t --scot environmentul de aici
+
+term0 :: Prog
+term0 = On (1,2) (V 3 :< M Mem1 :+ V 5 :<< Off)
+-- test term0 => "Memorie finala:(6,3) Nr accesari:3"
