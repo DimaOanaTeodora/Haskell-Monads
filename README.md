@@ -83,10 +83,10 @@
    term0 = (App (Lam "x" (Var "x" :+: Var "x")) (Con 10 :+: Con 11)) => Just 42
    ```
    - Maybe Monad (is system defined)
-   - data Value
+   - data Value (without Wrong)
    - interpretor mini Haskell for Maybe Monad with data Value
    - test programs
-   - show function (system defined for Maybe) 
+   - without showM function (system defined for Maybe) 
    
   ### * [Either String Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mEitherString.hs)
    
