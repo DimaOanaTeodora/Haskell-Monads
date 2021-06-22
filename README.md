@@ -101,7 +101,8 @@
    - data Value
    - interpretor mini Haskell for Either String Monad with data Value
    - test programs
-   - show function (system defined for Either String) 
+   - without showM function (system defined for Either String)
+   - Left "error text" or Left (show Wrong) for errors 
   
   ### * [List Monad and data Value](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/FLP45mList.hs)
    
