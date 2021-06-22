@@ -1,7 +1,10 @@
-
---- Monada Maybe
+--- Monada Maybe -- definita by default
+-- Dispare showM pentru ca e deja definit si el
+-- Nu mai apare Wrong in Value
 
 --- Limbajul si  Interpretorul
+
+type M = Maybe
 
 type Name = String
 
@@ -13,49 +16,38 @@ data Term = Var Name
   deriving (Show)
 
 data Value = Num Integer
-           | Fun (Value -> M Value)
-           | Wrong
+           | Fun (Value -> M Value) -- Value -> Identity Value
 
-instance Show Value where
+instance Show Value where 
  show (Num x) = show x
  show (Fun _) = "<function>"
- show Wrong   = "<wrong>"
 
-type Environment = [(Name, Value)] -- [(String, Value)]
+type Environment = [(Name, Value)] --[(String, Value)]
 
-type M = Maybe -- nu mai trebuie scrisa pt ca e deja monada
-
-{-- nu mai am nevoie de el
-showM :: Show a => M a -> String
-showM (Just value) = show value
-showM Nothing = error "Error"
--}
-
-interp :: Term -> Environment -> M Value -- Term -> [(String, Value)] -> Identity Value
+interp :: Term -> [(Name, Value)] -> M Value
+-- Term -> [(String, Value)] ->  Maybe Value
+interp (Var string) env = lookup string env -- returneaza deja un Maybe Value
 interp (Con n) env = return (Num n)
-interp (Var string) env = lookup string env -- intoarce un Maybe Value si e ok aici
 interp (t1 :+: t2) env = do
-       x <- interp t1 env
-       y <- interp t2 env
-       return (add x y)
-       where 
-             add (Num x) (Num y) = Num (x+y)
-             add _ _ = Wrong  
-
+  x <- interp t1 env -- x de tipul Value
+  y <- interp t2 env -- y de tipul Value
+  auxsum x y
+  where
+    auxsum (Num n1)(Num n2) = return (Num (n1+n2))
+    auxsum _ _ = Nothing
 interp (Lam string t) env = return $ Fun $ \v -> interp t ((string,v):env)
 interp (App t1 t2) env = do
-       f <- interp t1 env
-       x <- interp t2 env
-       app f x 
-       where 
-             app (Fun func) x = func x
-             app _ _ = return Wrong 
+  x <- interp t1 env
+  y <- interp t2 env
+  auxapp x y 
+  where
+      auxapp (Fun f) value = f value -- Fun (Value -> M Value)
+      auxapp _ _ = Nothing 
 
--- !! NU mai am nevoie de showM !!
-term0 = (App (Lam "x" (Var "x" :+: Var "x")) (Con 10 :+: Con 11))
--- interp term0 [] => "Just 42"
+test :: Term -> String
+test t = show $ interp t [] -- show-ul by default pt Maybe ca sa transforme in string
 
-pgm1 = App
-          (Lam "x" ((Var "x") :+: (Var "x")))
-          ((Con 10) :+:  (Con 11))
--- interp pgm1 [] => "Just 7" 
+term0:: Term
+term0 = App (Lam "x" ((Var "x") :+: (Var "x"))) ((Con 10) :+:  (Con 11))
+-- test term0 => "Just 42"
+-- interp t [] => Just 42
