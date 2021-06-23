@@ -7,6 +7,7 @@
 * [Lab 4-5](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/lab4-5.pdf)
 * [Lab 6](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/lab6.pdf)
 * [Lab 7](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/lab7.pdf)
+* [Hopefully all of them](https://github.com/daria68/Labs/blob/main/Monade.hs)
 
 
 ## Tests + Solutions: 
