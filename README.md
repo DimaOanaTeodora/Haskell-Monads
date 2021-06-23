@@ -8,6 +8,7 @@
 * [Lab 6](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/lab6.pdf)
 * [Lab 7](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/lab7.pdf)
 
+
 ## Tests + Solutions: 
 
 * [Var 1](https://github.com/DimaOanaTeodora/Haskell-Monads/blob/main/Colocviu1.hs)
